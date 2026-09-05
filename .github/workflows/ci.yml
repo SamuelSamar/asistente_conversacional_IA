@@ -43,4 +43,14 @@ jobs:
     - name: Ejecutar pruebas unitarias
       run:
         pytest
+    
+    # Agregar BUILD + ARTIFACT
+    - name: Crear paquete de entrega
+      run: |
+        zip -r asistente-adulto-mayor.zip . -x ".git/*"
 
+    - name: Guardar artefacto
+      uses: actions/upload-artifact@v4
+      with:
+        name: asistente-adulto-mayor
+        path: asistente-adulto-mayor.zip
