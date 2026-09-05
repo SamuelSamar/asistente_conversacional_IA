@@ -54,3 +54,12 @@ jobs:
       with:
         name: asistente-adulto-mayor
         path: asistente-adulto-mayor.zip
+
+    # Desplegar a ambiente de pruebas (simulado)
+    - name: Deploy simulado a ambiente de pruebas
+      run: |
+        echo "Iniciando despliegue simulado..."
+        echo "Artefacto preparado:"
+        ls -lh asistente-adulto-mayor.zip
+        echo "Despliegue completado"
+
