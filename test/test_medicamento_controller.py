@@ -41,7 +41,7 @@ def test_registrar_medicamento(app):
         # Verificamos que se haya agregado solo un medicamento
         assert len(medicamentos) == 1
         # Verificamos que el nombre del medicamento registrado sea correcto
-        assert medicamentos[0].medicamento == "Aspirina"
+        assert medicamentos[0].medicamento == "Paracetamol"
 
 # Prueba para actualizar un medicamento existente
 def test_actualizar_medicamento(app):
