@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-blue-50 flex items-center justify-center h-screen">
+    <form method="POST" class="bg-white p-8 rounded shadow-md w-96">
+        <h2 class="text-2xl font-bold mb-6 text-center font-serif font-extrabold">Registro de Asistente</h2>
+        {{ form.hidden_tag() }}
+        <div class="mb-4 italic">{{ form.nombre.label }} {{ form.nombre(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-4 italic">{{ form.correo.label }} {{ form.correo(class="w-full border p-2 rounded") }}</div>
+        <div class="mb-4 italic">{{ form.contrasena.label }} {{ form.contrasena(class="w-full border p-2 rounded") }}</div>
+        <div>{{ form.enviar(class="w-full font-serif font-bold bg-blue-500 text-white py-2 rounded hover:bg-blue-600") }}</div>
+        <p class="text-center text-sm mt-4 italic">¿Ya tienes cuenta? <a href="{{ url_for('asistentes.login') }}" class="text-blue-500 underline">Inicia sesión</a></p>
+    </form>
+</body>
+</html>

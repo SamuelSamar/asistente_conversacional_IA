@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Medicamento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 py-6 px-4">
+
+    {% include 'navbar.html' %}
+
+    <div class="max-w-xl mx-auto bg-white p-6 rounded shadow mt-10">
+        <h2 class="text-2xl text-center font-serif font-extrabold mb-4">Editar rutina</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            {{ form.rutina.label }} {{ form.rutina(class_="text-xl block w-full mb-2 border px-2 py-1 italic") }}
+            {{ form.url.label }} {{ form.url(class_="text-xl block w-full mb-2 border px-2 py-1 italic") }}
+            {{ form.enviar(class_="bg-blue-500 text-white font-serif px-4 py-2 rounded") }}
+        </form>
+        <div class="mt-4">
+            <a href="{{ url_for('rutinas.lista_rutinas') }}"
+                class="bg-gray-200 text-gray-800 font-serif px-4 py-2 rounded hover:bg-gray-300 transition">
+                Volver
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutinas Recreativas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 py-6 px-4">
+
+    {% include 'navbar.html' %}
+
+    <div class="max-w-3xl mx-auto mt-8 bg-white p-6 rounded shadow">
+        <h2 class="text-3xl font-bold mb-4 text-center font-serif font-extrabold">Registrar Nueva Rutina Recreativa</h2>
+        <div class="flex justify-center mb-6">
+            <button id="abrirModal" class="text-xl bg-blue-500 text-white px-4 py-2 rounded font-serif hover:bg-blue-600">
+                Registrar rutina
+            </button>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                <div class="px-4 py-2 rounded text-white font-serif mb-2
+                    {% if category == 'success' %}bg-green-500
+                    {% elif category == 'error' %}bg-red-500
+                    {% else %}bg-blue-500{% endif %}">
+                {{ message}}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+        <div id="modalRutina" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded shadow max-w-lg w-full relative">
+                <button id="cerrarModal"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;
+                </button>
+                <h3 class="text-xl mb-4 text-center font-serif font-extrabold">Registrar rutina recreativa</h3>
+                <form method="POST" class="mb-6">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-4">
+                        {{ form.rutina(class_="text-xl w-full border rounded italic px-3 py-2", placeholder="Rutina") }}
+                    </div>
+                    <div class="mb-4">
+                        {{ form.url(class_="text-xl w-full border rounded italic px-3 py-2", placeholder="Enlace del video") }}
+                    </div>
+                    {{ form.enviar(class_="bg-blue-500 text-white font-serif px-4 py-2 rounded hover:bg-blue-600") }}
+                </form>
+            </div>
+        </div>
+
+        <table class="w-full table-auto border text-sm mb-6">
+            <thead class="bg-blue-100">
+                <tr>
+                    <th class="px-4 py-2 border font-serif">Rutina</th>
+                    <th class="px-4 py-2 border font-serif">Video</th>
+                    <th class="px-4 py-2 border font-serif">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rut in rutinas %}
+                <tr class="border-t">
+                    <td class="text-xl px-4 py-2 border font-serif italic">{{ rut.rutina }}</td>
+                    <td class="text-xl px-4 py-2 truncate max-w-xs border font-serif italic">{{ rut.url }}</td>
+                    <td class="text-xl px-4 py-2 space-x-2 border">
+                        <a href="{{ url_for('rutinas.editar_rutina', id=rut.id) }}"
+                            class="bg-yellow-500 text-white font-serif px-2 py-1 rounded hover:bg-yellow-600">Editar</a>
+                        <form method="POST" action="{{ url_for('rutinas.eliminar_rutina', id=rut.id) }}" class="inline">
+                            <button class="bg-red-500 text-white font-serif px-2 py-1 rounded hover:bg-red-600">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-gray-400 font-serif italic">No hay rutinas registradas</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3 class="text-xl font-semibold mb-2 font-serif">Ver rutina en video</h3>
+        <select id="selectorRutina" onchange="mostrarVideo()" class="w-full border px-3 py-2 rounded mb-4 italic">
+            <option value="" disabled selected>Selecciona una rutina</option>
+            {% for rut in rutinas %}
+            <option value="{{ rut.url }}">{{ rut.rutina }}</option>
+            {% endfor %}
+        </select>
+
+        <div id="videoRutina"
+            class="rounded overflow-hidden border h-[250px] bg-gray-200 flex justify-center items-center">
+            <p class="text-gray-500 font-serif italic">Selecciona una rutina para ver el video</p>
+        </div>
+    </div>
+
+    <script>
+        const abrirModal = document.getElementById('abrirModal');
+        const cerrarModal = document.getElementById('cerrarModal');
+        const modalRutina = document.getElementById('modalRutina');
+
+        abrirModal.addEventListener('click', () => {
+            modalRutina.classList.remove('hidden');
+        });
+
+        cerrarModal.addEventListener('click', () => {
+            modalRutina.classList.add('hidden');
+        });
+
+        window.addEventListener('click', (e) => {
+            if(e.target === modalRutina){
+                modalRutina.classList.add('hidden');
+            }
+        });
+
+        function mostrarVideo() {
+            const selector = document.getElementById('selectorRutina');
+            const url = selector.value;
+
+            if (url) {
+                document.getElementById('videoRutina').innerHTML = `
+                    <iframe width="100%" height="250" src="${url}" 
+                        frameborder="0" allowfullscreen class="rounded"></iframe>
+                `;
+            }
+        }
+    </script>
+</body>
+
+</html>

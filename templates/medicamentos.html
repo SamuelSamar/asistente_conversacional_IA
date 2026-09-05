@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicamentos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 py-6 px-4" data-theme="light">
+
+    {% include 'navbar.html' %}
+
+    <div class="max-w-3xl mx-auto mt-8 bg-white p-6 rounded shadow">
+        <h2 class="text-3xl mb-4 text-center font-serif font-extrabold">Recordatorio de Medicamentos</h2>
+        <div class="flex justify-center mb-6">
+            <button id="abrirModal" class="text-xl bg-blue-500 text-white px-4 py-2 rounded font-serif hover:bg-blue-600">
+                Registrar recordatorio
+            </button>
+        </div>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="mb-4">
+                {% for category, message in messages %}
+                <div class="px-4 py-2 rounded text-white font-serif mb-2
+                    {% if category == 'success' %}bg-green-500
+                    {% elif category == 'error' %}bg-red-500
+                    {% else %}bg-blue-500{% endif %}">
+                {{ message}}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        <div id="modalFormulario"
+            class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded shadow max-w-lg w-full relative">
+                <button id="cerrarModal"
+                    class="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+                <h3 class="text-xl mb-4 text-center font-serif font-extrabold">Registrar recordatorio</h3>
+                <form method="POST" class="mb-6">
+                    {{form.hidden_tag()}}
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {{form.medicamento(class_="text-xl border rounded px-3 py-2 italic", placeholder="Medicamento")}}
+                        {{form.dosis(class_="text-xl border rounded px-3 py-2 italic", placeholder="Dosis")}}
+                        {{form.hora(class_="text-xl border rounded px-3 py-2 italic")}}
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        {{form.enviar(class_="bg-blue-500 text-white font-serif px-4 py-2 rounded hover:bg-blue-600")}}
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="w-full text-sm table-auto border">
+            <thead class="bg-blue-100">
+                <tr>
+                    <th class="px-4 py-2 border font-serif">Medicamentos</th>
+                    <th class="px-4 py-2 border font-serif">Dosis</th>
+                    <th class="px-4 py-2 border font-serif">Hora</th>
+                    <th class="px-4 py-2 border font-serif">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for med in medicamentos %}
+                <tr class="bg-white border-t">
+                    <td class="text-xl px-4 py-2 border font-serif italic">{{med.medicamento}}</td>
+                    <td class="text-xl px-4 py-2 border font-serif italic">{{med.dosis}}</td>
+                    <td class="text-xl px-4 py-2 border font-serif italic">{{med.hora}}</td>
+                    <td class="text-xl px-4 py-2 border space-x-2">
+                        <a href="{{url_for('medicamentos.editar_medicamento', id=med.id)}}"
+                            class="bg-yellow-500 text-white font-serif px-2 py-1 rounded hover:bg-yellow-600">Editar</a>
+                        <form method="POST" action="{{url_for('medicamentos.eliminar_medicamento', id=med.id)}}"
+                            class="inline">
+                            <button type="submit"
+                                class="bg-red-500 text-white font-serif px-2 py-1 rounded hover:bg-red-600">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="text-center py-4 text-gray-400 font-serif italic">No hay medicamentos registrados</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    const abrirModal = document.getElementById('abrirModal');
+    const cerrarModal = document.getElementById('cerrarModal');
+    const modalFormulario = document.getElementById('modalFormulario');
+
+    abrirModal.addEventListener('click', () => {
+        modalFormulario.classList.remove('hidden');
+    });
+
+    cerrarModal.addEventListener('click', () => {
+        modalFormulario.classList.add('hidden');
+    });
+    window.addEventListener('click', (e) => {
+        if (e.target === modalFormulario) {
+            modalFormulario.classList.add('hidden');
+        }
+    });
+</script>
+
+</html>
